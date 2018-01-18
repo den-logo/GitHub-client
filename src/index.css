@@ -1,12 +1,18 @@
 input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: searchfield-cancel-button;
 }
+#app{
+  font-family: Arial;
+}
 #user-name-input{
   border: 0;
   outline: 0;
   background: transparent;
   border-bottom: 1px solid black;
   min-width: 200px;
+}
+.rep-description{
+  font-family: Comic Sans MS, Comic Sans, cursive;
 }
 .repo-card-list{
   list-style-type:none;
