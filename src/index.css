@@ -8,3 +8,13 @@ input[type="search"]::-webkit-search-cancel-button {
   border-bottom: 1px solid black;
   min-width: 200px;
 }
+.repo-card-list{
+  list-style-type:none;
+}
+.repo-card{
+  margin-top: 30px;
+}
+.list-inlie-item{
+  display: inline-block;
+  margin-right: 5px;
+}
