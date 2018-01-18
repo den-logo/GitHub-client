@@ -19,7 +19,6 @@ export class UserNameInput extends Component{
     let userName = this.state.value;
     axios.get('https://api.github.com/users/'+ userName + '/repos?page=1&per_page=40')
       .then( (response) => {
-        console.log("response", response.data);
         this.setState({
           repos: <ReposList username= {this.state.value}/>
         })
