@@ -27,6 +27,7 @@ export class ReposList extends Component {
             response.data.forEach((rep) => {
                 reposArr.push(<RepoCard
                   repoName = { rep.name }
+                  url = { rep.html_url }
                   description = { rep.description }
                   language = { rep.language }
                   stars = { rep.stargazers_count }

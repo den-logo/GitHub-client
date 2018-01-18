@@ -12,7 +12,7 @@ export class RepoCard extends Component {
       <li className="col-sm-4 repo-card">
         <div className="card">
           <div className="card-header text-center">
-            <a href="">{ this.props.repoName }</a>
+            <a href={this.props.url}>{ this.props.repoName }</a>
           </div>
           <div className="card-body">
             { this.props.description }
