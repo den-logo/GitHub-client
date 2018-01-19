@@ -9,13 +9,13 @@ export class RepoCard extends Component {
   }
   render() {
     return (
-      <li className="col-4 repo-card">
+      <li className="repo-card">
         <div className="card">
           <div className="card-header text-center">
             <a href={this.props.url}>{ this.props.repoName }</a>
           </div>
           <div className="card-body">
-            <div class="rep-description">{ this.props.description }</div>
+            <div className="rep-description">{ this.props.description }</div>
             { this.getHr() }
             <ul className="list-inline">
               <li className="list-inlie-item">{ this.props.language }</li>
@@ -23,7 +23,10 @@ export class RepoCard extends Component {
               <li className="list-inlie-item">{ this.props.fork }</li>
             </ul>
           </div>
-          <div className="card-footer"><i className="float-right text-muted">Updated on { this.props.updated }</i></div>
+          <div className="card-footer">
+            <a href="#" className="card-link">See more</a>
+            <i className="float-right text-muted clearfix">Updated on { this.props.updated }</i>
+          </div>
         </div>
       </li>
     );
