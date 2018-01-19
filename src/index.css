@@ -18,10 +18,30 @@ input[type="search"]::-webkit-search-cancel-button {
   list-style-type:none;
 }
 .repo-card{
-  display: grid;
-  margin-top: 30px;
+  min-width: 296px;
+  display: inline;
 }
 .list-inlie-item{
   display: inline-block;
   margin-right: 5px;
+}
+.card-columns{
+  margin-top: 30px;
+}
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 3;
+    }
 }

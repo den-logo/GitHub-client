@@ -45,7 +45,7 @@ export class ReposList extends Component {
     this.getRepos();
     return (
       <ul className="repo-card-list container justify-content-center ">
-        <div className="row">
+        <div className="card-columns">
           {this.state.repos}
         </div>
       </ul>
