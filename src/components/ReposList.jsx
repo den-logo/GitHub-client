@@ -2,19 +2,26 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { RepoCard } from './RepoCard.jsx';
 
+
 export class ReposList extends Component {
   constructor(props){
     super(props);
+    this.allRepos = [];
     this.getRepos = this.getRepos.bind(this);
     this.state = {
-      repos: ''
-    }
+      repos: []
+    };
   }
-
-  getRepos(){
-    var reposArr = [];
-    let userName = this.props.username;
-    var page = 1;
+  componentWillMount(){
+    this.getRepos(this.props.username);
+  }
+  componentWillReceiveProps(nextProps){
+    this.allRepos = [];
+    this.setState({repos: []});
+    this.getRepos(nextProps.username);
+  }
+  getRepos(userName){
+    let page = 1;
     function isFork(fork){
         if(fork) return 'forked';
         return 'unforked';
@@ -24,8 +31,9 @@ export class ReposList extends Component {
     }
       axios.get('https://api.github.com/users/' + userName + '/repos?page=' + page + '&per_page=40')
         .then( (response) => {
-            response.data.forEach((rep) => {
-                reposArr.push(<RepoCard
+            response.data.forEach((rep, i) => {
+                this.allRepos.push(<RepoCard
+                  key = { this.page + '.' + i }
                   repoName = { rep.name }
                   url = { rep.html_url }
                   description = { rep.description }
@@ -34,19 +42,19 @@ export class ReposList extends Component {
                   fork = { isFork(rep.fork) }
                   updated = { getupdatedDate(rep.updated_at) } />)
             });
-            this.setState({repos: reposArr});
             page++;
+            this.setState({repos: this.allRepos});
           })
         .catch( (error) => {
-          console.log(error);
+          console.log('error', error);
         });
-}
+  }
   render(){
-    this.getRepos();
+    console.log(this.state.repos, this.allRepos);
     return (
-      <ul className="repo-card-list container justify-content-center ">
+      <ul className="repo-card-list container justify-content-center " id="repo-card-list">
         <div className="card-columns">
-          {this.state.repos}
+          {this.allRepos}
         </div>
       </ul>
     );
