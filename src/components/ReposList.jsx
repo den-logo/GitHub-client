@@ -1,3 +1,4 @@
+/* global $ */
 import React, { Component } from 'react';
 import axios from 'axios';
 import { RepoCard } from './RepoCard.jsx';
@@ -7,6 +8,7 @@ export class ReposList extends Component {
   constructor(props){
     super(props);
     this.allRepos = [];
+    this.page = 1;
     this.getRepos = this.getRepos.bind(this);
     this.state = {
       repos: []
@@ -17,11 +19,12 @@ export class ReposList extends Component {
   }
   componentWillReceiveProps(nextProps){
     this.allRepos = [];
+    this.page = 1;
     this.setState({repos: []});
     this.getRepos(nextProps.username);
   }
   getRepos(userName){
-    let page = 1;
+    document.removeEventListener('scroll', this.trackScrolling);
     function isFork(fork){
         if(fork) return 'forked';
         return 'unforked';
@@ -29,26 +32,39 @@ export class ReposList extends Component {
     function getupdatedDate(date){
       return date.slice(0, -1).split('T')[0];
     }
-      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + page + '&per_page=40')
+      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + this.page + '&per_page=40')
         .then( (response) => {
-            response.data.forEach((rep, i) => {
-                this.allRepos.push(<RepoCard
-                  key = { this.page + '.' + i }
-                  repoName = { rep.name }
-                  url = { rep.html_url }
-                  description = { rep.description }
-                  language = { rep.language }
-                  stars = { rep.stargazers_count }
-                  fork = { isFork(rep.fork) }
-                  updated = { getupdatedDate(rep.updated_at) } />)
-            });
-            page++;
-            this.setState({repos: this.allRepos});
+            if(response.data.length !== 0) {
+              response.data.forEach((rep, i) => {
+                  this.allRepos.push(<RepoCard
+                    key = { this.page + '.' + i }
+                    repoName = { rep.name }
+                    url = { rep.html_url }
+                    description = { rep.description }
+                    language = { rep.language }
+                    stars = { rep.stargazers_count }
+                    fork = { isFork(rep.fork) }
+                    updated = { getupdatedDate(rep.updated_at) } />)
+              });
+              this.page++;
+              this.setState({repos: this.allRepos});
+              document.addEventListener('scroll', this.trackScrolling);
+            }
           })
         .catch( (error) => {
           console.log('error', error);
         });
   }
+  isBottom(el) {
+    return el.getBoundingClientRect().bottom <= window.innerHeight;
+  }
+  trackScrolling = () => {
+    const wrappedElement = document.getElementById('repo-card-list');
+    if (this.isBottom(wrappedElement)) {
+      this.getRepos(this.props.username);
+      console.log('repo-card-list bottom reached', this.page, this.allRepos);
+    }
+  };
   render(){
     console.log(this.state.repos, this.allRepos);
     return (
