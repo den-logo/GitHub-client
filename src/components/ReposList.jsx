@@ -24,6 +24,7 @@ export class ReposList extends Component {
     this.getRepos(nextProps.username);
   }
   getRepos(userName){
+    console.log(this.page);
     document.removeEventListener('scroll', this.trackScrolling);
     function isFork(fork){
         if(fork) return 'forked';
@@ -32,7 +33,7 @@ export class ReposList extends Component {
     function getupdatedDate(date){
       return date.slice(0, -1).split('T')[0];
     }
-      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + this.page + '&per_page=40')
+      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + this.page + '&per_page=20')
         .then( (response) => {
             if(response.data.length !== 0) {
               response.data.forEach((rep, i) => {
@@ -50,6 +51,7 @@ export class ReposList extends Component {
               this.setState({repos: this.allRepos});
               document.addEventListener('scroll', this.trackScrolling);
             }
+            document.getElementById('loader').style.display = 'none';
           })
         .catch( (error) => {
           console.log('error', error);
@@ -62,17 +64,19 @@ export class ReposList extends Component {
     const wrappedElement = document.getElementById('repo-card-list');
     if (this.isBottom(wrappedElement)) {
       this.getRepos(this.props.username);
-      console.log('repo-card-list bottom reached', this.page, this.allRepos);
+      document.getElementById('loader').style.display = 'block';
     }
   };
   render(){
-    console.log(this.state.repos, this.allRepos);
     return (
-      <ul className="repo-card-list container justify-content-center " id="repo-card-list">
-        <div className="card-columns">
-          {this.allRepos}
-        </div>
-      </ul>
+      <div>
+        <ul className="repo-card-list container justify-content-center " id="repo-card-list">
+          <div className="card-columns">
+            {this.allRepos}
+          </div>
+        </ul>
+        <div className="mx-auto loader" id="loader"></div>
+      </div>
     );
   }
 }
