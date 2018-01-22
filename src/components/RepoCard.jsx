@@ -9,7 +9,7 @@ export class RepoCard extends Component {
   }
   render() {
     return (
-      <li className="repo-card">
+      <li className="repo-card col-xs-12 col-sm-6 col-lg-4">
         <div className="card">
           <div className="card-header text-center">
             <a href={this.props.url}>{ this.props.repoName }</a>
