@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { RepoCard } from './RepoCard.jsx';
 
-
 export class ReposList extends Component {
   constructor(props){
     super(props);
@@ -33,7 +32,7 @@ export class ReposList extends Component {
     function getupdatedDate(date){
       return date.slice(0, -1).split('T')[0];
     }
-      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + this.page + '&per_page=20')
+      axios.get('https://api.github.com/users/' + userName + '/repos?page=' + this.page + '&per_page=18')
         .then( (response) => {
             if(response.data.length !== 0) {
               response.data.forEach((rep, i) => {
@@ -69,9 +68,9 @@ export class ReposList extends Component {
   };
   render(){
     return (
-      <div>
-        <ul className="repo-card-list container justify-content-center " id="repo-card-list">
-          <div className="card-columns">
+      <div className="container">
+        <ul className="container-fluid justify-content-center" id="repo-card-list">
+          <div className="row repo-card-list">
             {this.allRepos}
           </div>
         </ul>
