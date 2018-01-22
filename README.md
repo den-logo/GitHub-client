@@ -1,7 +1,7 @@
 # GitHub API Client
 
 Mini React app that allows you to get some information about GitHub users repos:
-* List of public repositories of a user
+* List of public repositories of a certain user
 * Repository's basic information, that has been placed on the card of repository
 * Coming soon  `¯\_(ツ)_/¯`
 
