@@ -1,4 +1,3 @@
-/* global $ */
 import React, { Component } from 'react';
 import axios from 'axios';
 import { RepoCard } from './RepoCard.jsx';
@@ -39,6 +38,7 @@ export class ReposList extends Component {
                   this.allRepos.push(<RepoCard
                     key = { this.page + '.' + i }
                     repoName = { rep.name }
+                    repoFullName = { rep.full_name }
                     url = { rep.html_url }
                     description = { rep.description }
                     language = { rep.language }

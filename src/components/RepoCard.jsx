@@ -1,11 +1,86 @@
+/* global $ */
 import React, { Component } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import axios from 'axios';
+import { Modal } from './Modal.jsx';
 
 export class RepoCard extends Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      modal: ''
+    }
+  }
   getHr(){
     if(this.props.description == null){
       return ''
     }
     return <hr />
+  }
+  jsxTranslate(jsx){
+    return ReactDOMServer.renderToStaticMarkup(jsx);
+  }
+  componentDidMount(){
+    this.setState({
+      modal : <Modal id={this.props.repoName.split('.').join('')} />
+    });
+  }
+  handleClick(){
+    function jsxTranslate(jsx){
+      return ReactDOMServer.renderToStaticMarkup(jsx);
+    }
+    let title = this.jsxTranslate(<a href={this.props.url}>{this.props.repoName}</a>);
+    let tableRows = [];
+    let contributorsTable =
+    <div className="text-center">
+      <h4>Top Contributors</h4>
+      <table className="table-striped">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Contributions</th>
+          </tr>
+        </thead>
+        <tbody>
+          { tableRows }
+        </tbody>
+      </table>
+    </div>
+    axios.get('https://api.github.com/repos/' + this.props.repoFullName + '/contributors')
+      .then( (response) => {
+        for(let i = 0; i < 3; i++){
+          if(response.data[i]){
+            tableRows.push(
+              <tr>
+                <td className="float-left">
+                  <img className="rounded"
+                    alt=''
+                    src={ response.data[i].avatar_url }
+                    style={{ height: 45, width: 45, marginRight: 5}} />
+                  <a href={ response.data[i].html_url }>{ response.data[i].login }</a>
+                </td>
+                <td>
+                  { response.data[i].contributions }
+                </td>
+              </tr>
+            );
+          } else{
+            return '';
+          }
+        }
+      })
+      .catch( (error) => {
+        console.log(error);
+      });
+    console.log('length - ', tableRows.length);
+    $('.modal').on('shown.bs.modal', function (e) {
+    if(!tableRows.length)  contributorsTable = '';
+    let modal = $(this);
+      modal.find('.modal-title').html(title);
+      modal.find('.modal-body').html(jsxTranslate(contributorsTable));
+    });
+    console.log('length - ', tableRows.length);
   }
   render() {
     return (
@@ -24,9 +99,16 @@ export class RepoCard extends Component {
             </ul>
           </div>
           <div className="card-footer">
-            <a href="#" className="card-link">See more</a>
+            <a href=""
+               onClick={this.handleClick}
+               className="card-link"
+               data-toggle="modal"
+               data-target={'#' + this.props.repoName.split('.').join('')} >
+               See more
+            </a>
+            {this.state.modal}
             <i className="float-right text-muted clearfix">Updated on { this.props.updated }</i>
-          </div>
+        </div>
         </div>
       </li>
     );
