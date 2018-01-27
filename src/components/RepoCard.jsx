@@ -32,9 +32,25 @@ export class RepoCard extends Component {
     }
     let title = this.jsxTranslate(<a href={this.props.url}>{this.props.repoName}</a>);
     let tableRows = [];
+    let source = '';
     let contributorsTable =
     <div className="text-center">
       <h4>Top Contributors</h4>
+      <table className="table-striped">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Contributions</th>
+          </tr>
+        </thead>
+        <tbody>
+          { tableRows }
+        </tbody>
+      </table>
+    </div>
+    let langsTable =
+    <div className="text-center">
+      <h4>Most used langs</h4>
       <table className="table-striped">
         <thead>
           <tr>
@@ -73,14 +89,26 @@ export class RepoCard extends Component {
       .catch( (error) => {
         console.log(error);
       });
-    console.log('length - ', tableRows.length);
+    if(this.props.fork === 'forked'){
+      axios.get('https://api.github.com/repos/' + this.props.repoFullName)
+        .then( (response) => {
+          source =
+            <div className="">
+              <label className="text-muted">Forked from</label>
+              <a href={response.data.parent.html_url}> {response.data.parent.full_name}</a>
+            </div>
+        })
+        .catch( (error) => {
+          console.log(error);
+        });
+    }
     $('.modal').on('shown.bs.modal', function (e) {
     if(!tableRows.length)  contributorsTable = '';
     let modal = $(this);
       modal.find('.modal-title').html(title);
       modal.find('.modal-body').html(jsxTranslate(contributorsTable));
+      modal.find('.repo-source').html(jsxTranslate(source));
     });
-    console.log('length - ', tableRows.length);
   }
   render() {
     return (

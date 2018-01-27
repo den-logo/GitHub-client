@@ -22,7 +22,6 @@ export class ReposList extends Component {
     this.getRepos(nextProps.username);
   }
   getRepos(userName){
-    console.log(this.page);
     document.removeEventListener('scroll', this.trackScrolling);
     function isFork(fork){
         if(fork) return 'forked';
