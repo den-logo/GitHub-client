@@ -11,4 +11,4 @@ Clone this repo, move to the directory of this project and then in command line 
 
 * `npm install` - to install all dependencies
 
-* `npm start` - to start you localhost with with React App
+* `npm start` - to start you localhost with React App
